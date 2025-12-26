@@ -1,0 +1,252 @@
+"""
+01_load_filter.py
+-----------------
+Pipeline de chargement et de filtrage du dataset AIDev (MSR Challenge).
+
+Étapes :
+1. Charger l'ensemble des tables depuis HuggingFace
+2. Sauvegarder les données brutes (reproductibilité)
+3. Filtrer les repositories avec ≥ 500 stars (AIDev-pop)
+4. Sélectionner PRs AI et PRs humaines correspondantes
+5. Enrichir avec les informations auteur
+6. Calculer les métriques de base
+7. Sauvegarder les datasets intermédiaires
+"""
+
+import os
+import pandas as pd
+
+
+# Paramètres généraux
+
+RAW_DIR = "../data/raw"
+INTER_DIR = "../data/intermediate"
+
+os.makedirs(RAW_DIR, exist_ok=True)
+os.makedirs(INTER_DIR, exist_ok=True)
+
+
+# 1. Chargement des datasets HuggingFace
+
+print("Chargement des datasets depuis HuggingFace...")
+
+# Tables principales : toutes les PRs, repositories et users
+all_pull_request = pd.read_parquet(
+    "hf://datasets/hao-li/AIDev/all_pull_request.parquet"
+)
+all_repository = pd.read_parquet(
+    "hf://datasets/hao-li/AIDev/all_repository.parquet"
+)
+all_user = pd.read_parquet(
+    "hf://datasets/hao-li/AIDev/all_user.parquet"
+)
+
+# Tables filtrées : PRs humaines uniquement, repositories et users filtrés
+human_pull_request = pd.read_parquet(
+    "hf://datasets/hao-li/AIDev/human_pull_request.parquet"
+)
+repository = pd.read_parquet(
+    "hf://datasets/hao-li/AIDev/repository.parquet"
+)
+user = pd.read_parquet(
+    "hf://datasets/hao-li/AIDev/user.parquet"
+)
+
+# Tables de relations : commentaires, reviews et timeline des PRs
+pr_comments = pd.read_parquet(
+    "hf://datasets/hao-li/AIDev/pr_comments.parquet"
+)
+pr_reviews = pd.read_parquet(
+    "hf://datasets/hao-li/AIDev/pr_reviews.parquet"
+)
+pr_timeline = pd.read_parquet(
+    "hf://datasets/hao-li/AIDev/pr_timeline.parquet"
+)
+
+print("Chargement terminé.")
+
+
+# 2. Sauvegarde des données brutes
+
+print("Sauvegarde des datasets bruts...")
+
+# Sauvegarde de tous les datasets pour garantir la reproductibilité
+# Les données brutes sont conservées telles quelles, sans modification
+all_pull_request.to_parquet(f"{RAW_DIR}/all_pull_request.parquet")
+all_repository.to_parquet(f"{RAW_DIR}/all_repository.parquet")
+all_user.to_parquet(f"{RAW_DIR}/all_user.parquet")
+human_pull_request.to_parquet(f"{RAW_DIR}/human_pull_request.parquet")
+repository.to_parquet(f"{RAW_DIR}/repository.parquet")
+user.to_parquet(f"{RAW_DIR}/user.parquet")
+pr_comments.to_parquet(f"{RAW_DIR}/pr_comments.parquet")
+pr_reviews.to_parquet(f"{RAW_DIR}/pr_reviews.parquet")
+pr_timeline.to_parquet(f"{RAW_DIR}/pr_timeline.parquet")
+
+print("Données brutes sauvegardées.")
+
+
+# 3. Filtrage des repositories ≥ 500 stars
+
+print("Filtrage des repositories avec ≥ 500 stars...")
+
+# Sélection des repositories avec au moins 500 stars (critère AIDev-pop)
+# On conserve uniquement l'id et le nombre de stars pour les analyses ultérieures
+popular_repos = repository[repository["stars"] >= 500][["id", "stars"]]
+# Conversion en set pour optimiser les recherches avec isin()
+popular_repo_ids = set(popular_repos["id"])
+
+print(f"Nombre de repositories populaires : {len(popular_repo_ids)}")
+
+
+# 4. Sélection des PRs AI et humaines correspondantes
+
+print("Filtrage des pull requests AI et humaines...")
+
+# Filtrage des PRs AI : toutes les PRs des repositories populaires
+# (all_pull_request contient toutes les PRs, y compris celles générées par AI)
+ai_pr = all_pull_request[
+    all_pull_request["repo_id"].isin(popular_repo_ids)
+].copy()
+
+# Filtrage des PRs humaines : la table human_pull_request n'a pas de `repo_id`,
+# uniquement un `repo_url`. On doit donc la relier à la table repository
+# via l'URL du repository pour récupérer l'id, puis filtrer.
+# Note : human_pull_request a déjà une colonne "id" (id de la PR), donc le merge
+# créera "id_repo" pour l'id du repository (grâce au suffixe "_repo")
+human_pr_with_repo = human_pull_request.merge(
+    repository[["id", "url"]],
+    left_on="repo_url",
+    right_on="url",
+    how="left",
+    suffixes=("", "_repo"),
+)
+
+# On renomme l'id_repo (id du repository) en repo_id pour homogénéiser avec all_pull_request
+# L'id original de la PR reste "id"
+human_pr_with_repo.rename(columns={"id_repo": "repo_id"}, inplace=True)
+
+# Filtrage des PRs humaines : uniquement celles appartenant aux repositories populaires
+human_pr = human_pr_with_repo[
+    human_pr_with_repo["repo_id"].isin(popular_repo_ids)
+].copy()
+
+# Ajout d'un flag pour distinguer les PRs AI des PRs humaines
+ai_pr["author_type"] = "ai"
+human_pr["author_type"] = "human"
+
+# Fusion des deux datasets en un seul dataframe
+pr = pd.concat([ai_pr, human_pr], ignore_index=True)
+
+print(f"Total PRs retenues : {len(pr)}")
+
+
+# 5. Jointure avec les informations auteur
+
+print("Jointure avec la table user...")
+
+# Jointure avec la table user pour récupérer le login de l'auteur
+# On utilise une jointure left pour conserver toutes les PRs même si l'auteur n'est pas trouvé
+# Note : les suffixes sont nécessaires car les deux tables ont une colonne "id"
+# Le suffixe "_user" sera appliqué à la colonne "id" de la table user → "id_user"
+pr = pr.merge(
+    user[["id", "login"]],
+    left_on="user_id",
+    right_on="id",
+    how="left",
+    suffixes=("", "_user")
+)
+
+# Renommage de "login" en "author_login" pour plus de clarté
+pr.rename(columns={"login": "author_login"}, inplace=True)
+
+# Suppression de la colonne "id_user" créée par la jointure (on garde uniquement l'id de la PR)
+if "id_user" in pr.columns:
+    pr.drop(columns=["id_user"], inplace=True)
+
+
+# 6. Calcul des métriques
+
+print("Calcul des métriques...")
+
+# 6.1. Durée de review (en heures)
+# Conversion des colonnes de dates en format datetime
+pr["created_at"] = pd.to_datetime(pr["created_at"])
+pr["closed_at"] = pd.to_datetime(pr["closed_at"])
+
+# Calcul de la durée entre création et fermeture de la PR
+# Les valeurs manquantes (NaT) donneront NaN, ce qui est attendu
+pr["review_duration_hours"] = (
+    pr["closed_at"] - pr["created_at"]
+).dt.total_seconds() / 3600
+
+# 6.2. Flag de merge (0/1)
+# Une PR est considérée comme mergée si merged_at n'est pas null
+pr["merged"] = pr["merged_at"].notna().astype(int)
+
+# 6.3. Nombre de commentaires par PR
+# Comptage du nombre de commentaires pour chaque PR
+comment_counts = (
+    pr_comments.groupby("pr_id")
+    .size()
+    .reset_index(name="n_comments")
+)
+
+# Jointure avec le dataframe des PRs pour ajouter le nombre de commentaires
+pr = pr.merge(
+    comment_counts,
+    left_on="id",
+    right_on="pr_id",
+    how="left"
+)
+
+# Les PRs sans commentaires auront NaN, on les remplace par 0
+pr["n_comments"] = pr["n_comments"].fillna(0).astype(int)
+
+# Suppression de la colonne "pr_id" créée par la jointure (redondante avec "id")
+if "pr_id" in pr.columns:
+    pr.drop(columns=["pr_id"], inplace=True)
+
+# 6.4. Flag closed-loop (agent + bot même provider)
+# Un closed-loop existe quand l'agent AI et le bot de review proviennent du même provider
+# On détecte cela en cherchant des mots-clés dans le login de l'auteur
+BOT_KEYWORDS = [
+    "copilot", "cursor", "codex", "claude", "devin"
+]
+
+def closed_loop(row):
+    """
+    Détermine si une PR est en closed-loop.
+    
+    Un closed-loop existe si :
+    - La PR est générée par un agent AI (author_type == "ai")
+    - Le login de l'auteur contient un mot-clé de bot (même provider)
+    
+    Args:
+        row: Ligne du dataframe contenant les informations de la PR
+        
+    Returns:
+        1 si closed-loop, 0 sinon
+    """
+    # Seules les PRs AI peuvent être en closed-loop
+    if row["author_type"] != "ai":
+        return 0
+    # Si le login est manquant, on ne peut pas déterminer le closed-loop
+    if pd.isna(row["author_login"]):
+        return 0
+    # Vérification si le login contient un mot-clé de bot
+    return int(any(k in row["author_login"].lower() for k in BOT_KEYWORDS))
+
+pr["closed_loop"] = pr.apply(closed_loop, axis=1)
+
+
+# 7. Sauvegarde des datasets intermédiaires
+
+print("Sauvegarde des datasets intermédiaires...")
+
+# Sauvegarde du dataset principal : PRs filtrées et enrichies avec toutes les métriques
+pr.to_parquet(f"{INTER_DIR}/pr_filtered_enriched.parquet")
+
+# Sauvegarde de la liste des repositories populaires pour référence
+popular_repos.to_parquet(f"{INTER_DIR}/popular_repositories.parquet")
+
+print("Pipeline 01_load_filter terminé avec succès.")

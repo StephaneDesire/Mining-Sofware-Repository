@@ -1,0 +1,181 @@
+# Python
+# ------
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+# --------------------
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+*.venv
+python_env/
+idf*.env/
+
+# IDEs and editors
+# ----------------
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Data files
+# ----------
+# Données brutes et intermédiaires (volumineuses)
+data/raw/*.parquet
+data/intermediate/*.parquet
+data/final/*.parquet
+
+# Garder la structure des dossiers
+!data/raw/.gitkeep
+!data/intermediate/.gitkeep
+!data/final/.gitkeep
+
+# Résultats générés
+# -----------------
+# Tables CSV (générées par le pipeline)
+results/tables/*.csv
+
+# Figures PNG (générées par le pipeline)
+results/figures/*.png
+results/figures/*.pdf
+results/figures/*.svg
+
+# Garder la structure et le fichier d'interprétation
+!results/tables/.gitkeep
+!results/figures/.gitkeep
+!results/INTERPRETATION_ET_CONCLUSIONS.md
+
+# Fichiers temporaires
+# --------------------
+*.tmp
+*.temp
+*.log
+*.out
+.DS_Store
+Thumbs.db
+
+# Fichiers système
+# ----------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Fichiers de configuration locale
+# --------------------------------
+.env
+.env.local
+.env.*.local
+config.local.py
+settings.local.py
+
+# Fichiers de backup
+# ------------------
+*.bak
+*.backup
+*~
+
+# Fichiers de données volumineux
+# ------------------------------
+*.h5
+*.hdf5
+*.feather
+*.pickle
+*.pkl
+
+# Notebooks avec sorties
+# ----------------------
+# Les notebooks peuvent contenir des sorties volumineuses
+# Décommenter si vous utilisez des notebooks
+# *.ipynb
+
+# Fichiers de cache
+# ----------------
+.cache/
+*.cache
+.python-version
+
+# Fichiers spécifiques au projet
+# -------------------------------
+# PDFs volumineux (optionnel - décommenter si nécessaire)
+# *.pdf
+
+# Fichiers de test
+# ----------------
+test_output/
+test_results/
+
