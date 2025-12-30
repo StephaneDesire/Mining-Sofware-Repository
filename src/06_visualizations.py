@@ -18,10 +18,8 @@ import numpy as np
 
 # Paramètres généraux
 
-RESULTS_DIR = "../results/tables"
-FIGURES_DIR = "../results/figures"
+from paths import RESULTS_DIR, FIGURES_DIR, FINAL_DIR
 
-os.makedirs(FIGURES_DIR, exist_ok=True)
 
 # Configuration du style des graphiques
 sns.set_style("whitegrid")
@@ -35,7 +33,7 @@ print("Génération des visualisations RQ1...")
 
 try:
     rq1_summary = pd.read_csv(f"{RESULTS_DIR}/rq1_summary.csv")
-    rq1_data = pd.read_parquet("../data/final/rq1_data.parquet")
+    rq1_data = pd.read_parquet(f"{FINAL_DIR}/rq1_data.parquet")
     
     # 1.1. Boxplot de la durée de review : AI vs Human
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
@@ -145,7 +143,7 @@ print("Génération des visualisations RQ3...")
 
 try:
     rq3_summary = pd.read_csv(f"{RESULTS_DIR}/rq3_summary.csv")
-    rq3_data = pd.read_parquet("../data/final/rq3_data.parquet")
+    rq3_data = pd.read_parquet(f"{FINAL_DIR}/rq3_data.parquet")
     
     # 3.1. Boxplot de la durée de review : Closed-loop vs Open-loop
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
@@ -207,8 +205,8 @@ print("Génération de la visualisation comparative globale...")
 
 try:
     # Comparaison des trois groupes : AI, Human, Closed-loop, Open-loop
-    rq1_data_clean = pd.read_parquet("../data/final/rq1_data.parquet")
-    rq3_data_clean = pd.read_parquet("../data/final/rq3_data.parquet")
+    rq1_data_clean = pd.read_parquet(f"{FINAL_DIR}/rq1_data.parquet")
+    rq3_data_clean = pd.read_parquet(f"{FINAL_DIR}/rq3_data.parquet")
     
     # Préparation des données pour la comparaison
     rq1_data_clean["group"] = rq1_data_clean["author_type"].map({"ai": "AI", "human": "Human"})

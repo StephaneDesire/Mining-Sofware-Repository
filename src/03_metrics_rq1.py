@@ -21,10 +21,8 @@ from cliffs_delta import cliffs_delta
 
 # Paramètres généraux
 
-FINAL_DIR = "../data/final"
-RESULTS_DIR = "../results/tables"
+from paths import FINAL_DIR, RESULTS_DIR
 
-os.makedirs(RESULTS_DIR, exist_ok=True)
 
 
 # 1. Chargement des données

@@ -16,10 +16,8 @@ import numpy as np
 
 # Paramètres généraux
 
-INTER_DIR = "../data/intermediate"
-FINAL_DIR = "../data/final"
+from paths import INTER_DIR, FINAL_DIR
 
-os.makedirs(FINAL_DIR, exist_ok=True)
 
 
 # 1. Chargement des données intermédiaires
@@ -27,9 +25,11 @@ os.makedirs(FINAL_DIR, exist_ok=True)
 print("Chargement des données intermédiaires...")
 
 pr = pd.read_parquet(f"{INTER_DIR}/pr_filtered_enriched.parquet")
-pr_comments = pd.read_parquet("../data/raw/pr_comments.parquet")
-pr_reviews = pd.read_parquet("../data/raw/pr_reviews.parquet")
-pr_timeline = pd.read_parquet("../data/raw/pr_timeline.parquet")
+from paths import RAW_DIR
+
+pr_comments = pd.read_parquet(f"{RAW_DIR}/pr_comments.parquet")
+pr_reviews = pd.read_parquet(f"{RAW_DIR}/pr_reviews.parquet")
+pr_timeline = pd.read_parquet(f"{RAW_DIR}/pr_timeline.parquet")
 
 print(f"Nombre de PRs chargées : {len(pr)}")
 

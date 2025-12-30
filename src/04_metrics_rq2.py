@@ -21,10 +21,8 @@ import re
 
 # Paramètres généraux
 
-FINAL_DIR = "../data/final"
-RESULTS_DIR = "../results/tables"
+from paths import FINAL_DIR, RESULTS_DIR
 
-os.makedirs(RESULTS_DIR, exist_ok=True)
 
 
 # Mots-clés pour la catégorisation des commentaires
@@ -133,8 +131,10 @@ def analyze_sentiment(comment_text):
 
 print("Chargement des données pour RQ2...")
 
+from paths import RAW_DIR
+
 rq2_data = pd.read_parquet(f"{FINAL_DIR}/rq2_data.parquet")
-pr_timeline = pd.read_parquet("../data/raw/pr_timeline.parquet")
+pr_timeline = pd.read_parquet(f"{RAW_DIR}/pr_timeline.parquet")
 
 print(f"Nombre de commentaires sur PRs AI : {len(rq2_data)}")
 

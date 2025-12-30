@@ -10,6 +10,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
     
     steps:
     - uses: actions/checkout@v3
@@ -44,6 +46,8 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
     
     steps:
     - uses: actions/checkout@v3
