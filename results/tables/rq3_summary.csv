@@ -1,0 +1,5 @@
+Metric,Closed_Loop_Median,Open_Loop_Median,Closed_Loop_Mean,Open_Loop_Mean,P_Value,Effect_Size
+Closed-Loop Proportion,30.68%,N/A,N/A,N/A,N/A,N/A
+Review Duration (hours),9.90,2.83,88.21,74.46,0.0000,0.181 (small)
+Merge Rate,53.66%,64.74%,N/A,N/A,0.0000,N/A
+Number of Comments,3.00,1.00,3.36,1.71,0.0000,0.587 (large)

@@ -1,0 +1,4 @@
+Metric,AI_Median,Human_Median,AI_Mean,Human_Mean,P_Value,Effect_Size
+Review Duration (hours),18.29,3.56,102.27,86.35,0.0000,0.187 (small)
+Merge Rate,56.12%,62.31%,N/A,N/A,N/A,N/A
+Number of Comments,3.00,1.00,3.99,2.06,0.0000,0.515 (large)

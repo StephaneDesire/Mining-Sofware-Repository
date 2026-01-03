@@ -1,0 +1,6 @@
+category,count,sentiment_distribution,percentage
+corrective,11659,"{'neutral': 5727, 'negative': 5368, 'positive': 564}",47.47
+other,7243,"{'neutral': 6515, 'positive': 401, 'negative': 327}",29.49
+security,3632,"{'negative': 2133, 'neutral': 991, 'positive': 508}",14.79
+style,3560,"{'negative': 1963, 'neutral': 1041, 'positive': 556}",14.5
+testing,9964,"{'neutral': 5780, 'negative': 3507, 'positive': 677}",40.57

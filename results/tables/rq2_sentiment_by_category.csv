@@ -1,0 +1,16 @@
+category,sentiment,count,percentage
+corrective,negative,5368,46.04
+corrective,neutral,5727,49.12
+corrective,positive,564,4.84
+other,negative,327,4.51
+other,neutral,6515,89.95
+other,positive,401,5.54
+security,negative,2133,58.73
+security,neutral,991,27.29
+security,positive,508,13.99
+style,negative,1963,55.14
+style,neutral,1041,29.24
+style,positive,556,15.62
+testing,negative,3507,35.2
+testing,neutral,5780,58.01
+testing,positive,677,6.79

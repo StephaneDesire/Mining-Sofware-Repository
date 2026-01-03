@@ -33,6 +33,8 @@ Les métriques suivantes comparent les PRs générées par des agents AI selon l
 - **PRs AI reviewées par bots** : 4,558
 - **PRs AI reviewées par humains** : 3,080
 
+Note : les comparaisons ci‑dessus (AI_by_bot vs AI_by_human) portent uniquement sur le sous‑ensemble de PRs pour lesquelles un `reviewer_type` a pu être identifié (4,558 PRs reviewées par des bots + 3,080 PRs reviewées par des humains = 7,638 PRs). Les PRs restantes n'avaient pas de `reviewer_type` assigné et sont exclues de ces comparaisons.
+
 Métriques principales :
 - **Durée médiane de review** : **18.29 h** (AI_by_bot) vs **3.56 h** (AI_by_human)
 - **Durée moyenne de review** : 102.27 h vs 86.35 h

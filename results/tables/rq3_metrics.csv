@@ -1,0 +1,11 @@
+metric,value,closed_loop_count,open_loop_count,total,group,median,mean,std,q25,q75,count,merged,test,statistic,p_value,effect_size,effect_interpretation,degrees_of_freedom
+closed_loop_proportion,0.30683768403938216,3397.0,7674.0,11071.0,,,,,,,,,,,,,,
+review_duration_hours,,,,,closed-loop,9.904444444444444,88.21214633827233,197.5953695616812,0.6566666666666666,141.1338888888889,3397.0,,,,,,,
+review_duration_hours,,,,,open-loop,2.826388888888889,74.46224737931833,196.38621878258843,0.18430555555555556,45.15215277777778,7674.0,,,,,,,
+merge_rate,0.5366499852811304,,,,closed-loop,,,,,,3397.0,1823.0,,,,,,
+merge_rate,0.6473807662236122,,,,open-loop,,,,,,7674.0,4968.0,,,,,,
+n_comments,,,,,closed-loop,3.0,3.360612304974978,2.29861751906262,,,3397.0,,,,,,,
+n_comments,,,,,open-loop,1.0,1.712666145426114,3.0900602609579377,,,7674.0,,,,,,,
+review_duration_hours,,,,,,,,,,,,,Mann-Whitney U,15390701.0,3.879548052651558e-52,0.1807856186094999,small,
+merge_rate,,,,,,,,,,,,,Chi-square,121.28194776374562,3.315062756709145e-28,,,1.0
+n_comments,,,,,,,,,,,,,Mann-Whitney U,20686941.5,0.0,0.5871169881226356,large,

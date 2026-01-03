@@ -1,0 +1,10 @@
+metric,group,median,mean,std,q25,q75,count,value,merged,test,statistic,p_value,effect_size,effect_interpretation,degrees_of_freedom
+review_duration_hours,AI_by_bot,18.28861111111111,102.26531245429281,216.23472558352114,1.0343055555555556,143.23319444444445,4558.0,,,,,,,,
+review_duration_hours,AI_by_human,3.56,86.34627651515152,215.8479677422181,0.28770833333333334,51.17097222222222,3080.0,,,,,,,,
+merge_rate,AI_by_bot,,,,,,4558.0,0.5612110574813515,2558.0,,,,,,
+merge_rate,AI_by_human,,,,,,3080.0,0.6230519480519481,1919.0,,,,,,
+n_comments,AI_by_bot,3.0,3.994734532689776,3.507472621886259,,,4558.0,,,,,,,,
+n_comments,AI_by_human,1.0,2.062012987012987,1.8191321572696086,,,3080.0,,,,,,,,
+review_duration_hours,,,,,,,,,,Mann-Whitney U,8332695.0,6.97724361333469e-44,0.18710858031832142,small,
+merge_rate,,,,,,,,,,Chi-square,N/A,N/A,,,N/A
+n_comments,,,,,,,,,,Mann-Whitney U,10635930.0,0.0,0.5152365186371329,large,
