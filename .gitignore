@@ -104,17 +104,17 @@ data/final/*.parquet
 # Résultats générés
 # -----------------
 # Tables CSV (générées par le pipeline)
-results/tables/*.csv
+#results/tables/*.csv
 
 # Figures PNG (générées par le pipeline)
-results/figures/*.png
-results/figures/*.pdf
-results/figures/*.svg
+#results/figures/*.png
+#results/figures/*.pdf
+#results/figures/*.svg
 
 # Garder la structure et le fichier d'interprétation
-!results/tables/.gitkeep
-!results/figures/.gitkeep
-!results/INTERPRETATION_ET_CONCLUSIONS.md
+#!results/tables/.gitkeep
+#!results/figures/.gitkeep
+#!results/INTERPRETATION_ET_CONCLUSIONS.md
 
 # Fichiers temporaires
 # --------------------
